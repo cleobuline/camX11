@@ -1,0 +1,7 @@
+( DIFFUSION — chapitre 15 : marche aleatoire par blocs. A chaque pas,
+  le bloc tourne d'un quart de tour dans un sens aleatoire — les
+  particules diffusent, densite conservee. Un blob compact s'etale
+  en nuage brownien. )
+N/MARG
+: DIFFUSION RAND { CW CCW } >PLN0 ;
+MAKE-TABLE DIFFUSION

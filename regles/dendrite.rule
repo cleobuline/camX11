@@ -1,0 +1,12 @@
+( DENDRITE — §15.7 : agregation limitee par diffusion. Plan 0 : gaz de
+  particules en marche aleatoire. Plan 1 : la dendrite. Tout bloc qui
+  touche la dendrite fige ses particules, qui passent du gaz au cristal.
+  Semer 1 point au plan 1 au centre, ~10 pct de gaz au plan 0, et le
+  givre pousse. Note : le generateur CAM-B du livre est inutile ici,
+  notre RAND est deja invariant par bloc. )
+N/MARG
+: WALL CENTER' CW' CCW' OPP' OR OR OR ;
+: DENDRITE
+  WALL IF 0 ELSE RAND { CW CCW } THEN >PLN0
+  WALL IF CENTER' CENTER OR ELSE CENTER' THEN >PLN1 ;
+MAKE-TABLE DENDRITE

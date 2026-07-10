@@ -1,0 +1,7 @@
+( HPP-GAS — §12.3-12.4 : gaz sur les diagonales AVEC collisions.
+  Deux particules qui se rencontrent de front repartent sur l'autre
+  diagonale. Reversible, conserve particules et quantite de mouvement. )
+N/MARG
+: COLLISION CENTER OPP = CW CCW = AND CENTER CW <> AND ;
+: HPP-GAS COLLISION IF CW ELSE OPP THEN >PLN0 ;
+MAKE-TABLE HPP-GAS

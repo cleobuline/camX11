@@ -1,0 +1,7 @@
+( BBM — Billiard Ball Model, §18.2, verbatim du livre )
+N/MARG
+: 2PART CENTER OPP = IF CW ELSE CENTER THEN ;
+: BBM
+  CENTER CW CCW OPP + + +
+  { U OPP 2PART U U } >PLN0 ;
+MAKE-TABLE BBM

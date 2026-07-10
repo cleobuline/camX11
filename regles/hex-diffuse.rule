@@ -1,0 +1,9 @@
+( HEX-DIFFUSE — chapitre 16, banc d'essai du voisinage N/HEX. Diffusion
+  isotrope pure sur grille pseudo-hexagonale (6 directions a 60 degres,
+  brickwork even-r). Depuis un point, la tache grandit en HEXAGONE,
+  pas en losange (VonNeumann) ni en carre (Moore) -- c'est la vraie
+  geometrie du chapitre 16, la meme que celle du gaz FHP a venir. )
+N/HEX
+: ALLUME CENTER HEX-E HEX-NE HEX-NW HEX-W HEX-SW HEX-SE
+  OR OR OR OR OR OR ;
+MAKE-TABLE ALLUME

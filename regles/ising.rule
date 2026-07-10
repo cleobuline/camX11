@@ -1,0 +1,24 @@
+( ISING — chapitre 17 : le modele d'Ising microcanonique et reversible
+  Q2R. Un spin ne bascule que si ses 4 voisins sont equilibres, 2 hauts
+  2 bas -- l'energie de liaison est conservee EXACTEMENT, comme dans un
+  aimant isole. Pour etre bien defini, seul un sous-reseau en damier
+  s'active a chaque pas, en alternance : CAM-B fabrique ce masque
+  espace-temps grace a ses sondes &/HV, plan 3 = horloge globale,
+  plan 2 = damier XOR horloge ; CAM-A le lit par &CENTER et bascule.
+  Semis : Lancer ~50 pct au plan 0. Les domaines magnetiques ondulent,
+  leurs frontieres fremissent, l'energie ne bouge jamais. )
+CAM-A
+N/MOORE &/CENTERS
+: 4SUM NORTH SOUTH WEST EAST + + + ;
+: SPINS
+  4SUM 2 = &CENTER AND
+  IF CENTER NOT ELSE CENTER THEN >PLN0
+  CENTER >PLN1 ;
+MAKE-TABLE SPINS
+
+CAM-B
+N/MOORE &/HV
+: SUBLAT
+  &HORZ &VERT XOR CENTER' XOR >PLN2
+  CENTER' NOT >PLN3 ;
+MAKE-TABLE SUBLAT

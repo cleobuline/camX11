@@ -1,0 +1,22 @@
+( BRIAN'S BRAIN — trois etats : repos, feu, refractaire — avec traine
+  de comete sur CAM-B. Une cellule au repos s'allume si exactement 2
+  voisins flambent ; le feu passe refractaire ; le refractaire s'eteint.
+  CAM-B memorise : plan 2 = echo du refractaire, plan 3 = echo du plan 2.
+  Chaque flash laisse une comete blanc > cyan > vert > orange.
+  Semis : Lancer 3-5 pct sur le plan 0. )
+CAM-A
+N/MOORE &/CENTERS
+: 8SUM NORTH SOUTH WEST EAST
+  N.WEST N.EAST S.WEST S.EAST + + + + + + + ;
+: BRAIN
+  CENTER 0 = CENTER' 0 = AND
+  8SUM 2 = AND >PLN0
+  CENTER >PLN1 ;
+MAKE-TABLE BRAIN
+
+CAM-B
+N/MOORE &/CENTERS
+: TRAIL
+  &CENTER' >PLN2
+  CENTER >PLN3 ;
+MAKE-TABLE TRAIL

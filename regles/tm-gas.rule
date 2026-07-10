@@ -1,0 +1,7 @@
+( TM-GAS — §12.7 : gaz horizontal/vertical AVEC collisions.
+  Les particules voyagent le long des rangees et colonnes ; deux
+  particules qui se croisent dans un bloc rebondissent a 90 degres. )
+N/MARG-PH
+: COLLISION CENTER OPP = CW CCW = AND CENTER CW <> AND ;
+: TM-GAS COLLISION IF CENTER ELSE PHASE { CCW CW } THEN >PLN0 ;
+MAKE-TABLE TM-GAS

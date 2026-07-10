@@ -1,0 +1,22 @@
+( TUBE-WORMS — §9.3 : le recif de vers tubicoles, la regle-phare du
+  couplage des deux demi-machines. CAM-A tient le ver, plan 0, sorti
+  ou cache, et l'alarme, plan 1, qui sonne des que 2 voisins ou plus
+  sont actifs. CAM-B tient le chrono 2 bits, plans 2-3 : arme a 3
+  quand un ver sorti voit l'alarme, puis decompte. Le ver ressort
+  quand le chrono retombe a zero. )
+CAM-A
+N/MOORE &/CENTERS
+: 8SUM NORTH SOUTH WEST EAST
+  N.WEST N.EAST S.WEST S.EAST + + + + + + + ;
+: ALARM 8SUM { 0 0 1 1 1 1 1 1 1 } ;
+: TUBE-WORMS
+  &CENTERS { 1 0 0 0 } >PLN0
+  ALARM >PLN1 ;
+MAKE-TABLE TUBE-WORMS
+
+CAM-B
+N/MOORE &/CENTERS
+: TIMER
+  &CENTER &CENTER' AND IF 3 ELSE
+  CENTERS { 0 0 1 2 } THEN >PLNB ;
+MAKE-TABLE TIMER

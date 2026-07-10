@@ -1,0 +1,6 @@
+( CRITTERS — Toffoli, §12.8 : inversion + rotation 180 si 2 particules.
+  Reversible : Reverse apres N pas ramene exactement l'etat initial. )
+N/MARG
+: NPART CENTER CW CCW OPP + + + ;
+: CRITTERS NPART 2 = IF OPP ELSE CENTER THEN NOT ;
+MAKE-TABLE CRITTERS

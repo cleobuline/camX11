@@ -1,0 +1,18 @@
+( MAREE — demonstration du §11.5 : le run-cycle fait partie de la
+  physique. La regle est le transport diagonal pur, une ligne. Mais le
+  cycle joue 4 partitions puis les 4 memes A REBOURS : tout avance de
+  4 cellules en diagonale puis revient exactement, flux et reflux
+  perpetuels. Dessinez n'importe quoi : le paysage respire. )
+CYCLE
+0 IS <ORG-HV> 0 IS <PHASES> STEP
+3 IS <ORG-HV> 1 IS <PHASES> STEP
+0 IS <ORG-HV> 0 IS <PHASES> STEP
+3 IS <ORG-HV> 1 IS <PHASES> STEP
+3 IS <ORG-HV> 3 IS <PHASES> STEP
+0 IS <ORG-HV> 2 IS <PHASES> STEP
+3 IS <ORG-HV> 3 IS <PHASES> STEP
+0 IS <ORG-HV> 2 IS <PHASES> STEP
+END-CYCLE
+N/MARG
+: MAREE OPP >PLN0 ;
+MAKE-TABLE MAREE

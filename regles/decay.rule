@@ -1,0 +1,6 @@
+( DECAY — chapitre 8 : une goutte de pluie aleatoire eteint la bougie.
+  Chaque cellule vivante a une chance sur deux de mourir a chaque pas.
+  Verbatim du livre. )
+N/MOORE
+: DECAY RAND { CENTER 0 } >PLN0 ;
+MAKE-TABLE DECAY

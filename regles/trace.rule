@@ -1,0 +1,12 @@
+( 2D-BRDWNIAN-TRACE -- variante de 2D-BRDWNIAN qui laisse une trace
+  permanente sur le plan 1 : CENTER OR CENTER' accumule (jamais ne
+  retire) la marque de tout endroit visite par le gaz sur le plan 0.
+  Le plan 1 est assemble par POSITION FIXE sur la grille (pas par la
+  rotation du bloc) -- la trace reste ancree, pendant que le gaz
+  continue de tourner autour. Affiche les deux plans (cases visibilite)
+  pour voir le nuage ET son sillage a la fois. )
+N/MARG-PH
+: 2D-BRDWNIAN-TRACE
+  RAND { CCW CW } >PLN0
+  CENTER CENTER' OR >PLN1 ;
+MAKE-TABLE 2D-BRDWNIAN-TRACE

@@ -1,0 +1,4 @@
+( SWAP-ON-DIAG — §12.4 : mouvement uniforme le long des diagonales )
+N/MARG
+: SWAP-ON-DIAG OPP ;
+MAKE-TABLE SWAP-ON-DIAG

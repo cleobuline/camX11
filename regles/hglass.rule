@@ -1,0 +1,15 @@
+( HGLASS — §5.6, verbatim page 45 : la regle-enigme du livre. Une
+  table de 32 entrees sans aucune recette logique — et un comportement
+  que rien ne laisse deviner. Depuis une soupe : elle devore presque
+  tout. Depuis un bloc plein : elle le digere en structures obliques.
+  VONN-INDEX numerote les 32 motifs du voisinage de von Neumann. )
+N/MOORE
+: VONN-INDEX
+  EAST 2* WEST + 2* SOUTH + 2* NORTH + 2* CENTER + ;
+: HGLASS
+  VONN-INDEX
+  { 0 1 1 1 0 0 0 0
+    0 0 0 1 0 0 0 0
+    0 0 0 0 0 1 0 0
+    0 1 0 0 0 1 1 1 } >PLN0 ;
+MAKE-TABLE HGLASS

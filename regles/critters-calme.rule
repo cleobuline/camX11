@@ -1,0 +1,8 @@
+( CRITTERS-CALME — la version conjuguee de CRITTERS, sans clignotement.
+  Mathematiquement equivalente : c'est CRITTERS vu en complementant
+  l'ecran un pas sur deux, ce qui fait disparaitre le NOT. Le fond
+  reste noir, les creatures courent, et Reverse fonctionne. )
+N/MARG
+: NPART CENTER CW CCW OPP + + + ;
+: CRITTERS-CALME NPART 2 = IF OPP ELSE CENTER THEN ;
+MAKE-TABLE CRITTERS-CALME

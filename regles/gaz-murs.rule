@@ -1,0 +1,15 @@
+( GAZ-MURS — §15.2 + §12.4 : HPP-GAS dans des parois INDESTRUCTIBLES.
+  Les murs vivent au plan 1, cyan : tout bloc qui en touche un gele
+  son contenu, et l'alternance des partitions renvoie les particules
+  -- reflexion. Le plan 1 n'est jamais reecrit : les murs sont
+  eternels, contrairement aux parois en gaz d'hier qui s'effritaient.
+  Peindre l'enceinte au plan 1, verser le gaz au plan 0 : ballon,
+  labyrinthe, double fente, entonnoir... tout est permis. )
+N/MARG
+: WALL CENTER' CW' CCW' OPP' OR OR OR ;
+: COLLISION CENTER OPP = CW CCW = AND CENTER CW <> AND ;
+: GAZ-MURS
+  WALL IF CENTER ELSE
+    COLLISION IF CW ELSE OPP THEN
+  THEN >PLN0 ;
+MAKE-TABLE GAZ-MURS

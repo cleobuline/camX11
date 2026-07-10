@@ -1,0 +1,13 @@
+( ANNEAL — §5.4, majorite "tordue" de Vichniac, verbatim du livre.
+  Vote des 9 cellules du voisinage, mais les deux entrees adjacentes
+  au seuil sont echangees : 4 voix -> vivant, 5 voix -> mort. Les
+  frontieres marginales sont secouees, les domaines recuisent comme
+  un metal : les baies se comblent, les caps s'erodent -- tension de
+  superficie emergente. L'echo cyan trace le mouvement des bords. )
+N/MOORE
+: 9SUM CENTER NORTH SOUTH WEST EAST
+  N.WEST N.EAST S.WEST S.EAST + + + + + + + + ;
+: ANNEAL
+  9SUM { 0 0 0 0 1 0 1 1 1 1 } >PLN0
+  CENTER >PLN1 ;
+MAKE-TABLE ANNEAL

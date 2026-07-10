@@ -1,0 +1,22 @@
+( BANKS — §5.5 : l'ordinateur de Banks. Deux etats, voisinage von
+  Neumann, et pourtant calcul universel. Somme des 4 voisins :
+  0-1 inchange, 3-4 vivant, et a 2 voisins : en ligne droite on est
+  au coeur d'un fil, inchange ; en angle droit on est un coin, mort
+  -- l'unique cause de deces, celle qui fait courir les signaux.
+  Mode d'emploi, verifie par simulation : fils PLEINS d'au moins 3
+  cellules d'epaisseur au plan 0. TOUT coin convexe a 90 degres meurt :
+  proteger chaque coin d'un empattement, une bosse d'une cellule
+  orthogonale au coin. Le signal : effacer DEUX cellules en DIAGONALE
+  sur un bord, gomme taille 1 -- le biseau file a 1 cellule/pas, le
+  biseau inverse part dans l'autre sens. Un trou d'UNE cellule emet
+  deux signaux opposes. Une encoche droite de deux cellules RONGE le
+  fil, a eviter. Un anneau ferme a empattements = circuit d'horloge :
+  le signal y circule pour toujours. )
+N/MOORE
+: CORNER?
+  NORTH SOUTH AND WEST EAST AND OR
+  IF U ELSE 0 THEN ;
+: BANKS
+  NORTH SOUTH WEST EAST + + +
+  { U U CORNER? 1 1 } >PLN0 ;
+MAKE-TABLE BANKS

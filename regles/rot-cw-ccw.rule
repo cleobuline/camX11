@@ -1,0 +1,6 @@
+( ROT-CW/CCW — §12.7 : gaz sensible a la phase. Les particules se
+  deplacent horizontalement et verticalement, au lieu des diagonales
+  de SWAP-ON-DIAG. Verbatim du livre. )
+N/MARG-PH
+: ROT-CW/CCW PHASE { CCW CW } >PLN0 ;
+MAKE-TABLE ROT-CW/CCW
