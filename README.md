@@ -151,7 +151,7 @@ later. There is also a native macOS (Cocoa) version; this X11 build
 exists because most people working on cellular automata are not on a
 Mac.
 
+
 ## Licence
 
-TODO — pick one (GPL or MIT) and add a LICENSE file. Without it, nobody
-can legally reuse the code.
+MIT — see the LICENSE file.
