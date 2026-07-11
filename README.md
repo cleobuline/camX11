@@ -1,4 +1,4 @@
-# MacCam-6 (X11)
+# CamX11 (X11)
 
 A cellular-automata machine in the spirit of the CAM-6, the hardware
 described in Tommaso Toffoli and Norman Margolus's *Cellular Automata
