@@ -12,8 +12,7 @@ machine with a C compiler — with no display at all, for headless use.
 
 ```
                                                               
-    Brian's Brain running: white = firing, cyan = refractory  
-    (drop a screenshot here — screenshot.png)                 
+![Brian's Brain running on MacCam-6](screenshot.png)                
                                                               
 ```
 
