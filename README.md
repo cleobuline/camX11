@@ -10,11 +10,11 @@ dependencies; only the interface needs Xlib. It builds and runs on
 Linux and on macOS (via XQuartz), and the engine itself compiles on any
 machine with a C compiler — with no display at all, for headless use.
 
-```
+ 
                                                               
 ![Brian's Brain running on MacCam-6](screenshot.png)                
                                                               
-```
+ 
 
 ## Build
 
