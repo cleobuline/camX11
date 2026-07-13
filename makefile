@@ -1,56 +1,49 @@
 # MacCam-6 — Makefile de la version X11
 #
-# Le moteur (cam_core, cam_forth, fhp) est du C pur, sans dependance.
-# Seule l'interface a besoin de Xlib. Rien d'autre : ni GTK, ni SDL,
-# ni pkg-config obligatoire pour le moteur lui-meme.
+# Ecrit pour compiler avec N'IMPORTE QUEL make : GNU Make (meme l'ancien
+# 3.81 de macOS), les make natifs des BSD, un make POSIX strict. Aucune
+# syntaxe evoluee -- ni $(shell), ni !=, ni ifeq. La detection de X11 se
+# fait entierement dans la recette, en shell, ce que tout make execute
+# sans le comprendre lui-meme.
 #
 #   make            construit camx11
-#   make selftest   verifie le moteur SANS ecran (machine distante, CI)
+#   make selftest   verifie le moteur sans ecran
 #   make run        lance avec le dossier regles/
-#   make install    copie dans /usr/local/bin (PREFIX=... pour changer)
+#   make install    copie dans $(PREFIX)/bin
 #   make clean
 #
-# Prerequis :
-#   Debian / Ubuntu   sudo apt install libx11-dev pkg-config
-#   Fedora / RHEL     sudo dnf install libX11-devel pkgconf
-#   Arch              sudo pacman -S libx11 pkgconf
-#   OpenBSD / *BSD    pkg_add ... (X11 est dans le systeme de base)
-#   macOS + XQuartz   brew install pkg-config ; XQuartz fournit X11
+# Prerequis : compilateur C, en-tetes X11, pkg-config.
+#   Debian/Ubuntu  apt install libx11-dev pkg-config
+#   OpenBSD        X11 dans le systeme de base ; pkg_add pkgconf
+#   macOS+XQuartz  brew install pkg-config
 
-CC      ?= cc
-CFLAGS  ?= -O2 -Wall -Wextra -Wno-unused-parameter
-PREFIX  ?= /usr/local
-
-# --- Detection de X11 par pkg-config -------------------------------------
-# pkg-config interroge le systeme et rend les bons chemins d'en-tetes et de
-# bibliotheques, QUELLE QUE SOIT leur emplacement : /usr/lib sous Linux,
-# /usr/X11R6 sous OpenBSD, /opt/X11 pour XQuartz sous macOS. C'est la seule
-# facon reellement portable -- coder "-lX11" et "/opt/X11" en dur cassait
-# la compilation sur OpenBSD (merci crc pour le signalement).
-X11_CFLAGS := $(shell pkg-config --cflags x11 2>/dev/null)
-X11_LIBS   := $(shell pkg-config --libs   x11 2>/dev/null)
-
-# Repli si pkg-config est absent ou ne connait pas x11 : on tente le
-# classique -lX11, qui marche sur la plupart des Linux sans pkg-config.
-ifeq ($(strip $(X11_LIBS)),)
-X11_LIBS := -lX11
-endif
-
-CFLAGS += $(X11_CFLAGS)
-LDLIBS  = $(X11_LIBS) -lm
+CC      = cc
+CFLAGS  = -O2
+PREFIX  = /usr/local
 
 SRC = cam_core.c cam_forth.c fhp.c camx11.c
-HDR = cam_core.h cam_forth.h fhp.h
 
 all: camx11
 
-# Compilation en un seul appel : quatre fichiers, la separation en .o ne
-# ferait gagner que des fractions de seconde.
-camx11: $(SRC) $(HDR)
-	$(CC) $(CFLAGS) -o $@ $(SRC) $(LDLIBS)
+# Toute la detection X11 est faite ici, par le shell, a la compilation.
+# On aide d'abord pkg-config a trouver XQuartz sur macOS (PKG_CONFIG_PATH),
+# puis on lui demande les flags. S'il echoue, on essaie les chemins
+# XQuartz en dur (macOS sans pkg-config), sinon -lX11 (Linux standard).
+# Rien de tout ceci n'est de la syntaxe make : c'est du /bin/sh, compris
+# par tous les make sans exception.
+camx11: $(SRC) cam_core.h cam_forth.h fhp.h
+	@PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig:$$PKG_CONFIG_PATH; export PKG_CONFIG_PATH; \
+	XFLAGS=`pkg-config --cflags --libs x11 2>/dev/null`; \
+	if [ -z "$$XFLAGS" ]; then \
+	  if [ -d /opt/X11/include ]; then \
+	    XFLAGS="-I/opt/X11/include -L/opt/X11/lib -lX11"; \
+	  else \
+	    XFLAGS="-lX11"; \
+	  fi; \
+	fi; \
+	echo "$(CC) $(CFLAGS) -o camx11 $(SRC) $$XFLAGS -lm"; \
+	$(CC) $(CFLAGS) -o camx11 $(SRC) $$XFLAGS -lm
 
-# Verifie le moteur sans ouvrir de fenetre : utile sur un serveur, ou pour
-# savoir si un echec vient du calcul ou de l'affichage.
 selftest: camx11
 	./camx11 --selftest
 
@@ -58,13 +51,12 @@ run: camx11
 	./camx11 --size 256 --dir regles
 
 install: camx11
-	install -d $(DESTDIR)$(PREFIX)/bin
-	install -m 755 camx11 $(DESTDIR)$(PREFIX)/bin/camx11
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	cp camx11 $(DESTDIR)$(PREFIX)/bin/camx11
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/camx11
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/camx11
 
 clean:
 	rm -f camx11
-
-.PHONY: all selftest run install uninstall clean
