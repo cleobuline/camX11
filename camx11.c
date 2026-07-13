@@ -94,6 +94,12 @@ static XFontStruct *font = NULL;
 #define MAX_REGLES 128
 static char  regles[MAX_REGLES][256];
 static int   n_regles = 0, i_regle = -1;
+// Chargement differe : appuyer sur n/N ne fait que NOTER la regle voulue.
+// La compilation (couteuse pour les regles Margolus : ~200 ms) se fait au
+// tour de boucle suivant, une seule fois, meme si on martele la touche.
+// Sans ca, dix "n" rapides declenchaient dix compilations en rafale et
+// l'interface semblait bloquee.
+static int   regle_demandee = -1;
 static char  regle_dir[192] = "regles";
 static time_t regle_mtime = 0;
 static char  msg[128] = "";          // message ephemere du bandeau
@@ -568,12 +574,24 @@ int main(int argc, char **argv) {
                     case '$': vis_mask ^= 8; act = "visibilite plan 3"; break;
                     case '?': show_help = !show_help; act = "aide"; break;
                     case 'n':
-                        if (n_regles) { charge_regle((i_regle + 1) % n_regles); act = "regle suivante"; }
-                        else { flash("aucune regle dans %s/", regle_dir); act = "aucune regle"; }
+                        if (n_regles) {
+                            int cur = (regle_demandee >= 0) ? regle_demandee : i_regle;
+                            regle_demandee = (cur + 1) % n_regles;
+                            flash("-> %s", strrchr(regles[regle_demandee], '/')
+                                           ? strrchr(regles[regle_demandee], '/') + 1
+                                           : regles[regle_demandee]);
+                            act = "regle suivante";
+                        } else { flash("aucune regle dans %s/", regle_dir); act = "aucune regle"; }
                         break;
                     case 'N':
-                        if (n_regles) { charge_regle((i_regle - 1 + n_regles) % n_regles); act = "regle precedente"; }
-                        else { flash("aucune regle dans %s/", regle_dir); act = "aucune regle"; }
+                        if (n_regles) {
+                            int cur = (regle_demandee >= 0) ? regle_demandee : i_regle;
+                            regle_demandee = (cur - 1 + n_regles) % n_regles;
+                            flash("-> %s", strrchr(regles[regle_demandee], '/')
+                                           ? strrchr(regles[regle_demandee], '/') + 1
+                                           : regles[regle_demandee]);
+                            act = "regle precedente";
+                        } else { flash("aucune regle dans %s/", regle_dir); act = "aucune regle"; }
                         break;
                     case 'l':
                         if (i_regle >= 0) { charge_regle(i_regle); flash("rechargee"); act = "recharge"; }
@@ -602,6 +620,15 @@ int main(int argc, char **argv) {
             }
         }
 
+        // Chargement differe : on compile la derniere regle demandee, une
+        // seule fois par tour de boucle. Marteler n/N ne compile donc que
+        // la regle finale, pas toutes les intermediaires.
+        if (regle_demandee >= 0 && regle_demandee != i_regle) {
+            charge_regle(regle_demandee);
+            regle_demandee = -1;
+        } else {
+            regle_demandee = -1;
+        }
         surveille_regle();          // recompile si le .forth a change
         if (msg_ttl > 0) msg_ttl--;
         if (running) step_once();
